@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>test-common</artifactId>
+        <groupId>cute.dundun</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>webflux-test</artifactId>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fc.common</groupId>
+            <artifactId>fc-gql-webflux-starter</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>fc.common</groupId>-->
+<!--            <artifactId>spring-boot-webflux-starter</artifactId>-->
+<!--        </dependency>-->
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.deweyjose</groupId>
+                <artifactId>graphqlcodegen-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--默认不开启客户端的生成-->
+                    <!--<generateClient>true</generateClient>-->
+                    <typeMapping>
+                        <BigDecimal>java.math.BigDecimal</BigDecimal>
+                        <Long>java.lang.Long</Long>
+                    </typeMapping>
+                    <schemaPaths>
+                        <param>src/main/resources/schema</param>
+                    </schemaPaths>
+                    <packageName>cute.dundun.entity</packageName>
+                    <outputDir>src/main/java</outputDir>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

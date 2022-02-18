@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty scope="context" name="applicationName" source="spring.application.name"
+                    defaultValue="store-service"/>
+    <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root" defaultValue="info"/>
+    <springProperty scope="context" name="logPath" source="logging.path" defaultValue="/data/app/logs/${applicationName}"/>
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出（配色）：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%X{trace_id}] [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="fileLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logPath}/${applicationName}.log</file>
+        <!--高于或者等于ThresholdFilter将被打印-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%X{trace_id}] [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${logPath}/${applicationName}.%d{yyyyMMdd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Mybatis日志 -->
+    <logger name="org.apache.ibatis" level="DEBUG"/>
+    <!-- Spring相关 -->
+    <logger name="org.springframework" level="ERROR"/>
+    <!-- 连接池 -->
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+
+    <root level="${LOG_LEVEL}">
+        <springProfile name="dev | test | demo | prod">
+            <appender-ref ref="fileLog"/>
+        </springProfile>
+        <springProfile name="local">
+            <appender-ref ref="consoleLog"/>
+        </springProfile>
+    </root>
+</configuration>
+

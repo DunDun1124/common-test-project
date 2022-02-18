@@ -1,0 +1,58 @@
+type Option {
+    label: String
+    value: ID
+}
+
+type SelectOption {
+    label: String
+    value: ID
+    child: [SelectOption]
+}
+
+input Page {
+    pageCurrent: Int
+    pageSize: Int
+}
+
+
+
+"""通用文件"""
+type FilePayload {
+
+    """文件ID"""
+    fileId:String
+
+    """文件名称"""
+    filename:String
+
+    """文件地址"""
+    fileUrl:String
+
+    """文件上传时间 GMT+8 yyyy-MM-dd HH:mm:ss"""
+    fileUploadTime:String
+}
+
+"""通用文件"""
+input FileInput {
+
+    """文件ID"""
+    fileId:String
+
+    """文件名称"""
+    filename:String
+
+    """文件地址"""
+    fileUrl:String
+
+    """文件上传时间 GMT+8 yyyy-MM-dd HH:mm:ss"""
+    fileUploadTime:String
+
+}
+
+#scalar 自动注册依赖已经引入，基本类型无需重新声明
+scalar Long
+scalar DateTime
+scalar Date
+scalar BigDecimal
+scalar Object
+#scalar
